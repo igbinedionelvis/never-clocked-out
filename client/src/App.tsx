@@ -92,7 +92,10 @@ function App() {
         </section>
       )}
 
-      <ChatPanel narrativeStage={narrativeStage} />
+      <ChatPanel
+        narrativeStage={narrativeStage}
+        openedArtifacts={openedArtifacts}
+      />
 
       <footer className="workshop-footer">
         <p>ARCHIVE STATUS: INCOMPLETE</p>
