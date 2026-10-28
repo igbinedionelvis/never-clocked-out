@@ -1,32 +1,63 @@
-# React + TypeScript + Vite
+# Never Clocked Out
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**Some shifts never end.**
 
-Currently, two official plugins are available:
+An interactive AI ghost story set in a fictional machine shop in 1989.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Raymond “Ray” Mercer was a maintenance welder on the night shift at Morrow Works Machine Shop No. 4. On October 17, 1989, he stopped Press No. 4 after documenting abnormal machine behavior and incomplete safety checks.
 
-## React Compiler
+The official incident report records an unauthorized production stoppage.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The timecard records something else: Ray never clocked out.
 
-## Expanding the Oxlint configuration
+## About the project
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Never Clocked Out is an interactive archive mystery. Players examine eight surviving records, uncover the events surrounding Ray’s final shift, and interview Ray through a locally running AI model.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+The story unfolds in three acts:
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- **Act I — The Timecard:** Ray is guarded. The archive reveals an unclosed shift.
+- **Act II — The Machine:** The records reveal the machine’s condition and the decision to stop production.
+- **Act III — The Final Shift:** The full motive emerges through the surviving evidence.
+
+The player ultimately chooses how to close the archive.
+
+## Endings
+
+- **Let the Record Stand:** Leave the official incident report unchanged.
+- **Set the Record Straight:** Add a corrective archive note based on the surviving records.
+- **Close the Shift:** Close Ray’s unended time record.
+
+The story preserves ambiguity about Ray’s fate and the nature of the archive.
+
+## Built with
+
+- React
+- TypeScript
+- Vite
+- Express
+- Ollama
+- Gemma 3 4B
+
+## Local AI
+
+Ray is brought to life using **Gemma 3 4B**, running locally through Ollama.
+
+The model generates Ray’s dialogue based on the records the player has examined. The narrative is divided into acts, and the backend enforces which information Ray is allowed to discuss at each stage.
+
+The AI is not allowed to rewrite the canonical archive, invent new story facts, or resolve the story’s supernatural ambiguity.
+
+## Getting started
+
+### Requirements
+
+- Node.js
+- npm
+- [Ollama](https://ollama.com/)
+- Gemma 3 4B
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/igbinedionelvis/never-clocked-out.git
+cd never-clocked-out

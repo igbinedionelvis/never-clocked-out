@@ -1,38 +1,138 @@
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Special+Elite&display=swap");
+
+:root {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  color: #e6ddc9;
+  background: #141512;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --bg: #141512;
+  --panel: #1d1e19;
+  --panel-light: #24251f;
+  --paper: #d8c9a8;
+  --paper-dark: #b9a984;
+  --ink: #29271f;
+  --text: #e6ddc9;
+  --muted: #9c9788;
+  --line: #444439;
+  --brass: #b69a5b;
+  --brass-light: #d0b77b;
+  --green: #687a5a;
+  --red: #a35c4c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, #29291f 0%, transparent 60%),
+    var(--bg);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+.artifact-card:focus-visible {
+  outline: 2px solid var(--brass-light);
+  outline-offset: 4px;
+}
+
 #root {
   min-height: 100vh;
 }
 
+/* ==========================================
+   MAIN WORKSHOP FRAME
+   ========================================== */
+
 .workshop {
+  position: relative;
   min-height: 100vh;
-  padding: 64px 24px;
-  background: #171816;
-  color: #e4e0d5;
-  font-family: "Courier New", monospace;
+  overflow: hidden;
+  padding: 32px 24px 24px;
+  color: var(--text);
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(182, 154, 91, 0.025),
+      transparent
+    );
+}
+
+.workshop::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(1000px, calc(100% - 32px));
+  height: 1px;
+  content: "";
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--brass),
+    transparent
+  );
+  opacity: 0.5;
 }
 
 .workshop-header {
   max-width: 900px;
-  margin: 0 auto 72px;
+  margin: 0 auto 34px;
   text-align: center;
 }
 
 .eyebrow {
-  color: #9a9b8d;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  color: var(--brass);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  line-height: 1.7;
+  text-transform: uppercase;
 }
 
 .workshop-header h1 {
-  margin: 24px 0 12px;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  font-weight: 500;
-  letter-spacing: -0.05em;
+  margin: 12px 0 8px;
+  color: #e8dfcc;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  text-shadow: 0 3px 30px rgba(0, 0, 0, 0.45);
 }
 
 .tagline {
-  color: #b7b3a8;
-  font-size: 1.1rem;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
 }
+
+/* ==========================================
+   ARCHIVE
+   ========================================== */
 
 .archive {
   max-width: 1000px;
@@ -40,144 +140,688 @@
 }
 
 .archive-heading {
-  margin-bottom: 32px;
-  border-bottom: 1px solid #45483f;
-  padding-bottom: 24px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
 }
 
-.archive-heading h2 {
-  margin: 12px 0;
+.archive-heading h2,
+.artifact-viewer h2 {
+  margin: 6px 0 10px;
+  color: var(--paper);
+  font-family: "Special Elite", "Courier New", monospace;
   font-size: 1.8rem;
-  font-weight: 500;
+  font-weight: 400;
+}
+
+.archive-heading > p {
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.7;
 }
 
 .archive-heading > p:last-child {
-  color: #aaa99f;
+  margin-top: 12px;
+  color: var(--brass-light);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
 }
 
 .artifact-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 10px;
 }
 
 .artifact-card {
-  border: 1px solid #45483f;
-  background: #20221f;
-  padding: 24px;
-  transition: border-color 160ms ease;
+  position: relative;
+  min-height: 120px;
+  border: 1px solid #454438;
+  border-left: 3px solid #68634c;
+  padding: 16px 20px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.025),
+      transparent 55%
+    ),
+    var(--panel);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
 }
 
 .artifact-card:hover {
-  border-color: #a39a7c;
+  border-color: var(--brass);
+  border-left-color: var(--brass-light);
+  background: var(--panel-light);
+  transform: translateY(-2px);
 }
 
 .artifact-id {
-  color: #8d907f;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  color: var(--brass);
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
 .artifact-card h3 {
-  margin: 16px 0;
+  margin: 8px 0;
+  color: var(--paper);
+  font-family: "Special Elite", "Courier New", monospace;
   font-size: 1.15rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .artifact-card p {
-  color: #aaa99f;
-  font-size: 0.85rem;
+  margin: 4px 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
 }
 
 .artifact-author {
-  margin-top: 6px;
+  color: #777568;
 }
 
-.workshop-footer {
-  max-width: 1000px;
-  margin: 72px auto 0;
-  border-top: 1px solid #45483f;
-  padding-top: 24px;
-  color: #85877d;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+/* ==========================================
+   SELECTED RECORD + CHAT LAYOUT
+   ========================================== */
+
+/*
+  The selected artifact and chat share a grid.
+  Keep them side by side on desktop.
+*/
+
+.archive-interview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 16px auto 28px;
 }
+
+/* Both panels occupy their grid column */
+
+.archive-interview-layout > .artifact-viewer,
+.archive-interview-layout > .chat-panel {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+
+/* ==========================================
+   ARCHIVE RECORD
+   ========================================== */
+
+.artifact-viewer {
+  max-width: 760px;
+  margin: 0 auto;
+  border: 1px solid #6d6249;
+  padding: clamp(20px, 3vw, 30px);
+  color: var(--ink);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(74, 56, 31, 0.025) 0,
+      rgba(74, 56, 31, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    var(--paper);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.35);
+}
+
+.artifact-viewer > button {
+  margin-bottom: 20px;
+  border: 1px solid rgba(41, 39, 31, 0.35);
+  padding: 9px 13px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.artifact-viewer > button:hover {
+  background: rgba(41, 39, 31, 0.08);
+}
+
+.artifact-viewer .eyebrow {
+  color: #756342;
+}
+
+.artifact-viewer h2 {
+  margin: 8px 0 12px;
+  color: var(--ink);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.artifact-viewer > p {
+  margin: 6px 0;
+  color: #5b5548;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.artifact-content {
+  margin-top: 18px;
+  border-top: 1px solid rgba(41, 39, 31, 0.3);
+  padding-top: 18px;
+  color: #29271f;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   RAY'S INTERVIEW PANEL
+   ========================================== */
 
 .chat-panel {
   max-width: 760px;
-  margin: 40px auto;
-  padding: 24px;
-  border: 1px solid #393939;
-  background: #151515;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  padding: 22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.018),
+      transparent 60%
+    ),
+    #191a16;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.2);
+}
+
+/* Override the generic chat margins inside the shared layout */
+
+.archive-interview-layout .chat-panel {
+  position: sticky;
+  top: 16px;
+  margin: 0;
+  padding: 20px;
 }
 
 .chat-header {
-  border-bottom: 1px solid #393939;
-  padding-bottom: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
 }
+
+.chat-header h2 {
+  margin: 6px 0;
+  color: var(--paper);
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.chat-header p {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+/*
+  Chat messages scroll within the panel.
+  This prevents the chat itself from making the page
+  excessively tall.
+*/
 
 .chat-messages {
   display: flex;
+  min-height: 120px;
+  max-height: 300px;
   flex-direction: column;
-  gap: 16px;
-  min-height: 180px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.archive-interview-layout .chat-messages {
+  min-height: 140px;
+  max-height: min(42vh, 360px);
 }
 
 .chat-message {
-  max-width: 80%;
-  padding: 12px 16px;
-  border: 1px solid #393939;
+  max-width: 84%;
+  border: 1px solid var(--line);
+  padding: 10px 14px;
+  line-height: 1.65;
 }
 
 .chat-message.player {
   align-self: flex-end;
-  background: #252525;
+  border-color: #514b3b;
+  background: #24241e;
 }
 
 .chat-message.ray {
   align-self: flex-start;
-  background: #1b211d;
+  border-left: 3px solid var(--green);
+  background: #20231d;
 }
 
 .message-sender {
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: #aaa;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--brass);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .chat-message p {
-  margin-bottom: 0;
+  margin: 0;
+  color: #ded6c4;
+  font-size: 0.8rem;
   white-space: pre-wrap;
 }
+
+/* Chat input */
 
 .chat-input {
   display: flex;
   gap: 10px;
+  margin-top: 14px;
 }
 
 .chat-input input {
   flex: 1;
   min-width: 0;
-  padding: 12px;
-  background: #0d0d0d;
-  border: 1px solid #393939;
-  color: #eee;
+  border: 1px solid #4b4a3e;
+  border-radius: 0;
+  padding: 11px 13px;
+  color: var(--text);
+  background: #11120f;
+}
+
+.chat-input input::placeholder {
+  color: #777568;
 }
 
 .chat-input button {
-  padding: 12px 20px;
+  border: 1px solid var(--brass);
+  padding: 11px 18px;
+  color: #171711;
+  background: var(--brass);
   cursor: pointer;
+  transition: background 160ms ease;
 }
 
-@media (max-width: 650px) {
-  .artifact-list {
+.chat-input button:hover {
+  background: var(--brass-light);
+}
+
+.chat-input button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ==========================================
+   ENDING CHOICES
+   ========================================== */
+
+.ending-choices {
+  margin-top: 32px;
+  border: 1px solid #61563e;
+  padding: clamp(22px, 4vw, 36px);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(182, 154, 91, 0.07),
+      transparent 65%
+    ),
+    #1a1b16;
+}
+
+.ending-choices h2 {
+  margin: 10px 0;
+  color: var(--paper);
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 400;
+}
+
+.ending-choices > p:not(.eyebrow) {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.ending-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ending-options button {
+  display: flex;
+  min-height: 145px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid #504b3b;
+  padding: 16px;
+  text-align: left;
+  background: #20211b;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.ending-options button:hover {
+  border-color: var(--brass-light);
+  background: #29291f;
+  transform: translateY(-2px);
+}
+
+.ending-options button span {
+  color: var(--brass);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.ending-options button strong {
+  color: var(--paper);
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.ending-options button small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   ENDING SCREENS
+   ========================================== */
+
+.ending-screen {
+  max-width: 760px;
+  margin: 0 auto;
+  border: 1px solid #6d6249;
+  padding: clamp(26px, 5vw, 46px);
+  color: var(--ink);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(74, 56, 31, 0.025) 0,
+      rgba(74, 56, 31, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    var(--paper);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.35);
+  animation: archive-reveal 500ms ease both;
+}
+
+.ending-screen .eyebrow {
+  color: #756342;
+}
+
+.ending-screen h2 {
+  margin: 14px 0 20px;
+  color: var(--ink);
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.ending-screen > p {
+  color: #5b5548;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.ending-screen blockquote {
+  margin: 26px 0;
+  border-left: 3px solid #8c794f;
+  padding: 8px 0 8px 20px;
+  color: #383328;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+.ending-screen .ending-status {
+  margin-top: 26px;
+  border-top: 1px solid rgba(41, 39, 31, 0.25);
+  padding-top: 16px;
+  color: #756342;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Corrective archive note */
+
+.archive-correction {
+  margin: 24px 0;
+  border: 1px solid rgba(41, 39, 31, 0.35);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.archive-correction .eyebrow {
+  margin-top: 0;
+  color: #756342;
+}
+
+.archive-correction p:last-child {
+  margin-bottom: 0;
+  color: #383328;
+  font-size: 0.82rem;
+  line-height: 1.8;
+}
+
+/* Final shift closure */
+
+.shift-closure {
+  text-align: center;
+}
+
+.shift-closure h2 {
+  margin: 28px 0;
+  color: #393328;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  letter-spacing: 0.08em;
+}
+
+.shift-closure > p:not(.eyebrow) {
+  color: #5b5548;
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+}
+
+.shift-closure .final-line {
+  margin: 44px 0 20px;
+  color: #393328;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+  line-height: 1.7;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.workshop-footer {
+  max-width: 1000px;
+  margin: 36px auto 0;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  color: #858273;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+}
+
+.workshop-footer p {
+  margin: 5px 0;
+}
+
+/* ==========================================
+   MOTION
+   ========================================== */
+
+@keyframes archive-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+/* Tablet and smaller: stack the record and chat */
+
+@media (max-width: 900px) {
+  .archive-interview-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 760px;
+    margin-top: 18px;
+  }
+
+  .archive-interview-layout .chat-panel {
+    position: static;
+  }
+
+  .archive-interview-layout .chat-messages {
+    max-height: 300px;
+  }
+
+  .artifact-viewer {
+    padding: 24px;
+  }
+
+  .ending-options {
     grid-template-columns: 1fr;
   }
 
+  .ending-options button {
+    min-height: 120px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
   .workshop {
-    padding: 40px 16px;
+    padding: 24px 14px 20px;
+  }
+
+  .workshop-header {
+    margin-bottom: 26px;
+  }
+
+  .workshop-header h1 {
+    font-size: clamp(2.3rem, 10vw, 3.6rem);
+  }
+
+  .tagline {
+    font-size: 0.76rem;
+  }
+
+  .archive-heading h2 {
+    font-size: 1.6rem;
+  }
+
+  .artifact-list {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .artifact-card {
+    min-height: 105px;
+    padding: 14px 16px;
+  }
+
+  .artifact-viewer {
+    padding: 20px 16px;
+  }
+
+  .artifact-viewer h2 {
+    font-size: 1.55rem;
+  }
+
+  .artifact-content {
+    font-size: 0.78rem;
+    line-height: 1.65;
+  }
+
+  .chat-panel,
+  .archive-interview-layout .chat-panel {
+    padding: 16px;
+  }
+
+  .chat-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .chat-message {
+    max-width: 94%;
+  }
+
+  .chat-input {
+    flex-direction: column;
+  }
+
+  .chat-input button {
+    width: 100%;
+  }
+
+  .ending-screen {
+    padding: 24px 18px;
+  }
+
+  .ending-screen blockquote {
+    font-size: 1.05rem;
+  }
+
+  .shift-closure .final-line {
+    margin-top: 36px;
+  }
+
+  .workshop-footer {
+    margin-top: 28px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
