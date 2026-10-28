@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ChatMessage = {
   sender: "player" | "ray";
@@ -10,14 +10,17 @@ type ChatPanelProps = {
   openedArtifacts: string[];
 };
 
-function ChatPanel({
-  narrativeStage,
-  openedArtifacts,
-}: ChatPanelProps) {
+function ChatPanel({ narrativeStage, openedArtifacts }: ChatPanelProps) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Start a fresh interview when a new story act unlocks.
+    setMessages([]);
+    setError("");
+  }, [narrativeStage]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,9 +58,7 @@ function ChatPanel({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.error || "The server could not respond.",
-        );
+        throw new Error(data.error || "The server could not respond.");
       }
 
       if (typeof data.reply !== "string") {
@@ -69,17 +70,12 @@ function ChatPanel({
         text: data.reply,
       };
 
-      setMessages((previousMessages) => [
-        ...previousMessages,
-        rayMessage,
-      ]);
+      setMessages((previousMessages) => [...previousMessages, rayMessage]);
     } catch (error) {
       console.error("Chat error:", error);
 
       setError(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong.",
+        error instanceof Error ? error.message : "Something went wrong.",
       );
     } finally {
       setIsLoading(false);
@@ -101,9 +97,7 @@ function ChatPanel({
       </div>
 
       <div className="chat-messages">
-        {messages.length === 0 && (
-          <p>Ray's conversation will appear here.</p>
-        )}
+        {messages.length === 0 && <p>Ray's conversation will appear here.</p>}
 
         {messages.map((msg, index) => (
           <div
@@ -128,9 +122,7 @@ function ChatPanel({
         {error && (
           <div className="chat-error">
             <p>{error}</p>
-            <button onClick={() => setError("")}>
-              Dismiss
-            </button>
+            <button onClick={() => setError("")}>Dismiss</button>
           </div>
         )}
       </div>
