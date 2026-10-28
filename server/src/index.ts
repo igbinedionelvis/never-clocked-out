@@ -1,11 +1,10 @@
-
 import express from "express";
 import cors from "cors";
 
 const app = express();
 const PORT = 3001;
 const OLLAMA_URL = "http://localhost:11434/api/chat";
-const OLLAMA_MODEL = "gemma3:4b";
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "gemma3:4b";
 
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
@@ -125,16 +124,10 @@ const actTwoRequired = [
   "artifact-05",
 ];
 
-const actThreeRequired = [
-  "artifact-06",
-  "artifact-07",
-  "artifact-08",
-];
+const actThreeRequired = ["artifact-06", "artifact-07", "artifact-08"];
 
 function getNarrativeStage(openedIds: string[]): NarrativeStage {
-  const hasActTwoRecords = actTwoRequired.every((id) =>
-    openedIds.includes(id),
-  );
+  const hasActTwoRecords = actTwoRequired.every((id) => openedIds.includes(id));
 
   const hasActThreeRecords = actThreeRequired.every((id) =>
     openedIds.includes(id),
@@ -227,7 +220,14 @@ He may plainly explain:
 - Ray could not send Eli into a machine he believed was unsafe.
 - Ray stopped the press despite the foreman's instruction.
 
-When asked why he stopped the press, explain the motive directly.
+When asked why he stopped the press, you MUST answer directly and include all
+three facts:
+1. Eli Turner was scheduled to operate Press No. 4 at 06:00.
+2. Ray believed the machine was unsafe and could seriously injure the next operator.
+3. Ray stopped the press because he would not send Eli into a machine he believed was unsafe.
+
+Do not answer only with machine details.
+Do not omit Eli or Ray's motive.
 
 Do not invent additional reasons, tasks, actions, or events.
 Do not claim Ray personally completed an inspection.
@@ -238,17 +238,13 @@ Do not say Ray died or explain whether he is supernatural.
 `;
 }
 
-function buildSystemPrompt(
-  stage: NarrativeStage,
-  openedIds: string[],
-): string {
+function buildSystemPrompt(stage: NarrativeStage, openedIds: string[]): string {
   const allowedIds = getAllowedArtifactIds(stage);
 
   const availableArtifacts = artifacts
     .filter(
       (artifact) =>
-        allowedIds.includes(artifact.id) &&
-        openedIds.includes(artifact.id),
+        allowedIds.includes(artifact.id) && openedIds.includes(artifact.id),
     )
     .map(
       (artifact) =>
@@ -383,11 +379,21 @@ function violatesStage(reply: string, stage: NarrativeStage): boolean {
   return false;
 }
 
-app.get("/api/health", (_req, res) => {
+app.get("/api/health", async (_req, res) => {
+  let ollamaStatus = "unreachable";
+
+  try {
+    const response = await fetch("http://localhost:11434/api/tags");
+    ollamaStatus = response.ok ? "reachable" : "unreachable";
+  } catch {
+    ollamaStatus = "unreachable";
+  }
+
   res.json({
     status: "ok",
     message: "Never Clocked Out API is running",
     model: OLLAMA_MODEL,
+    ollama: ollamaStatus,
   });
 });
 
@@ -410,12 +416,14 @@ app.post("/api/chat", async (req, res) => {
      * Do not trust a stage value sent by the frontend.
      */
     const openedIds = Array.isArray(openedArtifactIds)
-      ? [...new Set(
-          openedArtifactIds.filter(
-            (id): id is string =>
-              typeof id === "string" && validArtifactIds.includes(id),
+      ? [
+          ...new Set(
+            openedArtifactIds.filter(
+              (id): id is string =>
+                typeof id === "string" && validArtifactIds.includes(id),
+            ),
           ),
-        )]
+        ]
       : [];
 
     const stage = getNarrativeStage(openedIds);
